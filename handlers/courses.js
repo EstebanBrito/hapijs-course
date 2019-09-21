@@ -1,14 +1,25 @@
 const uuid4 = require('uuid/v4')
+const services = require('../services/courses')
 
 async function listCourses (request, h) {
-  return request.server.app.DB.courses
+  try{
+    let data = await services.getCourses()
+    return h.response(data.rows).code(200)
+  }catch(err){
+    console.log(error)//DEBUG
+    return h.response(err).code(500)
+  }
 }
 
 async function createCourse (request, h) {
-  const id = uuid4()
-  const payload = Object.assign(request.payload, { id })
-  request.server.app.DB.courses.push(payload)
-  return h.response(payload).code(201)
+  const course = Object.assign(request.payload)
+  try{
+    const ok = await services.saveCourses(course)
+    return h.response(course).code(201)
+  }catch(err){
+    return h.response(err).code(500)
+  }
+  // request.server.app.DB.courses.push(course) //Storage not in memory anymore
 }
 
 module.exports = {

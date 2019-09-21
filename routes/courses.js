@@ -5,7 +5,7 @@ const courseSchema = require('../schemas/courseSchema')
 const courses = [
   {
     method: 'GET',
-    path: '/api/courses',
+    path: '/api/v1/courses',
     handler: handlers.listCourses
   },
   {
